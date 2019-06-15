@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/moscaicnetworks/chatterboxhub/x/karmaservice/types"
+	"github.com/mosaicnetworks/chatterboxhub/x/karmaservice/types"
 
 	clientrest "github.com/cosmos/cosmos-sdk/client/rest"
 	"github.com/cosmos/cosmos-sdk/codec"

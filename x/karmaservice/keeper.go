@@ -24,6 +24,7 @@ func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) 
 	}
 }
 
+/*
 // Gets the entire Whois metadata struct for a name
 func (k Keeper) GetWhois(ctx sdk.Context, name string) Whois {
 	store := ctx.KVStore(k.storeKey)
@@ -91,25 +92,23 @@ func (k Keeper) GetNamesIterator(ctx sdk.Context) sdk.Iterator {
 	store := ctx.KVStore(k.storeKey)
 	return sdk.KVStorePrefixIterator(store, nil)
 }
+*/
 
 func (k Keeper) SetMoniker(ctx sdk.Context, name string, addr sdk.AccAddress) {
 	store := ctx.KVStore(k.storeKey)
 	karma := k.GetKarma(ctx, addr)
 
-	karma.moniker = name
+	karma.Moniker = name
 
 	store.Set([]byte(addr), k.cdc.MustMarshalBinaryBare(karma))
 }
 
-func (k Keeper) SetKarma(ctx sdk.Context, addr sdk.AccAddress, upvote bool) {
+func (k Keeper) SetKarma(ctx sdk.Context, addr sdk.AccAddress, votedelta int) {
 	store := ctx.KVStore(k.storeKey)
 	karma := k.GetKarma(ctx, addr)
 
-	if upvote {
-		karma.karma++
-	} else {
-		karma.karma--
-	}
+	karma.Karma += votedelta
+
 	store.Set([]byte(addr), k.cdc.MustMarshalBinaryBare(karma))
 }
 
@@ -122,4 +121,10 @@ func (k Keeper) GetKarma(ctx sdk.Context, addr sdk.AccAddress) KarmaRecord {
 	var karma KarmaRecord
 	k.cdc.MustUnmarshalBinaryBare(bz, &karma)
 	return karma
+}
+
+// Get an iterator over all names in which the keys are the names and the values are the whois
+func (k Keeper) GetKarmaRecordsIterator(ctx sdk.Context) sdk.Iterator {
+	store := ctx.KVStore(k.storeKey)
+	return sdk.KVStorePrefixIterator(store, nil)
 }

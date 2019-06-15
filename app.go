@@ -22,7 +22,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/params"
 	"github.com/cosmos/cosmos-sdk/x/slashing"
 	"github.com/cosmos/cosmos-sdk/x/staking"
-	"github.com/moscaicnetworks/chatterboxhub/x/karmaservice"
+	"github.com/mosaicnetworks/chatterboxhub/x/karmaservice"
 )
 
 const appName = "karmaservice"
@@ -69,7 +69,7 @@ type karmaServiceApp struct {
 	tkeyStaking      *sdk.TransientStoreKey
 	keyDistr         *sdk.KVStoreKey
 	tkeyDistr        *sdk.TransientStoreKey
-	keyNS            *sdk.KVStoreKey
+	keyKarma         *sdk.KVStoreKey
 	keyParams        *sdk.KVStoreKey
 	tkeyParams       *sdk.TransientStoreKey
 	keySlashing      *sdk.KVStoreKey
@@ -82,7 +82,7 @@ type karmaServiceApp struct {
 	distrKeeper         distr.Keeper
 	feeCollectionKeeper auth.FeeCollectionKeeper
 	paramsKeeper        params.Keeper
-	nsKeeper            karmaservice.Keeper
+	karmaKeeper         karmaservice.Keeper
 
 	// Module Manager
 	mm *module.Manager
@@ -109,7 +109,7 @@ func NewKarmaServiceApp(logger log.Logger, db dbm.DB) *karmaServiceApp {
 		tkeyStaking:      sdk.NewTransientStoreKey(staking.TStoreKey),
 		keyDistr:         sdk.NewKVStoreKey(distr.StoreKey),
 		tkeyDistr:        sdk.NewTransientStoreKey(distr.TStoreKey),
-		keyNS:            sdk.NewKVStoreKey(karmaservice.StoreKey),
+		keyKarma:         sdk.NewKVStoreKey(karmaservice.StoreKey),
 		keyParams:        sdk.NewKVStoreKey(params.StoreKey),
 		tkeyParams:       sdk.NewTransientStoreKey(params.TStoreKey),
 		keySlashing:      sdk.NewKVStoreKey(slashing.StoreKey),
@@ -180,9 +180,9 @@ func NewKarmaServiceApp(logger log.Logger, db dbm.DB) *karmaServiceApp {
 
 	// The NameserviceKeeper is the Keeper from the module for this tutorial
 	// It handles interactions with the namestore
-	app.nsKeeper = karmaservice.NewKeeper(
+	app.karmaKeeper = karmaservice.NewKeeper(
 		app.bankKeeper,
-		app.keyNS,
+		app.keyKarma,
 		app.cdc,
 	)
 
@@ -191,7 +191,7 @@ func NewKarmaServiceApp(logger log.Logger, db dbm.DB) *karmaServiceApp {
 		genutil.NewAppModule(app.accountKeeper, app.stakingKeeper, app.BaseApp.DeliverTx),
 		auth.NewAppModule(app.accountKeeper, app.feeCollectionKeeper),
 		bank.NewAppModule(app.bankKeeper, app.accountKeeper),
-		karmaservice.NewAppModule(app.nsKeeper, app.bankKeeper),
+		karmaservice.NewAppModule(app.karmaKeeper, app.bankKeeper),
 		distr.NewAppModule(app.distrKeeper),
 		slashing.NewAppModule(app.slashingKeeper, app.stakingKeeper),
 		staking.NewAppModule(app.stakingKeeper, app.feeCollectionKeeper, app.distrKeeper, app.accountKeeper),
@@ -238,7 +238,7 @@ func NewKarmaServiceApp(logger log.Logger, db dbm.DB) *karmaServiceApp {
 		app.keyDistr,
 		app.tkeyDistr,
 		app.keySlashing,
-		app.keyNS,
+		app.keyKarma,
 		app.keyParams,
 		app.tkeyParams,
 	)

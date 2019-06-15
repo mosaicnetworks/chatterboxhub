@@ -1,4 +1,4 @@
-module github.com/moscaicnetworks/chatterboxhub
+module github.com/mosaicnetworks/chatterboxhub
 
 go 1.12
 
