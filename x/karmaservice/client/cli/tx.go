@@ -3,33 +3,30 @@ package cli
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/utils"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/mosaicnetworks/chatterboxhub/x/karmaservice/types"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth"
 )
 
 func GetTxCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
 	karmaserviceTxCmd := &cobra.Command{
 		Use:                        types.ModuleName,
-		Short:                      "Nameservice transaction subcommands",
+		Short:                      "Karmaservice transaction subcommands",
 		DisableFlagParsing:         true,
 		SuggestionsMinimumDistance: 2,
 		RunE:                       utils.ValidateCmd,
 	}
 
-	karmaserviceTxCmd.AddCommand(client.PostCommands(
-		GetCmdBuyName(cdc),
-		GetCmdSetName(cdc),
-	)...)
-
+	/*
+		karmaserviceTxCmd.AddCommand(client.PostCommands(
+			GetCmdBuyName(cdc),
+			GetCmdSetName(cdc),
+		)...)
+	*/
 	return karmaserviceTxCmd
 }
 
+/*
 // GetCmdBuyName is the CLI command for sending a BuyName transaction
 func GetCmdBuyName(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
@@ -91,3 +88,4 @@ func GetCmdSetName(cdc *codec.Codec) *cobra.Command {
 		},
 	}
 }
+*/

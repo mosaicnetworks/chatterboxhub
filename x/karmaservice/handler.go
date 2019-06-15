@@ -13,7 +13,7 @@ func NewHandler(keeper Keeper) sdk.Handler {
 		case MsgSetMoniker:
 			return handleMsgSetMoniker(ctx, keeper, msg)
 		case MsgSetKarma:
-			return handleMsgSetName(ctx, keeper, msg)
+			return handleMsgSetKarma(ctx, keeper, msg)
 		default:
 			errMsg := fmt.Sprintf("Unrecognized karmaservice Msg type: %v", msg.Type())
 			return sdk.ErrUnknownRequest(errMsg).Result()

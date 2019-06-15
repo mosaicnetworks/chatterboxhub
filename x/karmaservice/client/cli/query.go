@@ -1,10 +1,6 @@
 package cli
 
 import (
-	"fmt"
-
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/utils"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/mosaicnetworks/chatterboxhub/x/karmaservice/types"
@@ -19,14 +15,15 @@ func GetQueryCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
 		SuggestionsMinimumDistance: 2,
 		RunE:                       utils.ValidateCmd,
 	}
-	karmaserviceQueryCmd.AddCommand(client.GetCommands(
-		GetCmdResolveName(storeKey, cdc),
-		GetCmdWhois(storeKey, cdc),
-		GetCmdNames(storeKey, cdc),
-	)...)
+	//	karmaserviceQueryCmd.AddCommand(client.GetCommands(
+	//		GetCmdResolveName(storeKey, cdc),
+	//		GetCmdWhois(storeKey, cdc),
+	//		GetCmdNames(storeKey, cdc),
+	//	)...)
 	return karmaserviceQueryCmd
 }
 
+/*
 // GetCmdResolveName queries information about a name
 func GetCmdResolveName(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
@@ -94,3 +91,4 @@ func GetCmdNames(queryRoute string, cdc *codec.Codec) *cobra.Command {
 		},
 	}
 }
+*/

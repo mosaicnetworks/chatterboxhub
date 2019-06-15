@@ -27,14 +27,15 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 	}
 }
 
+//TODO actually fix this
 func queryAllKarma(ctx sdk.Context, req abci.RequestQuery, keeper Keeper) ([]byte, sdk.Error) {
 	var namesList QueryResKarma
 
-	iterator := keeper.GetKarmaRecordsIterator(ctx)
+	// iterator := keeper.GetKarmaRecordsIterator(ctx)
 
-	for ; iterator.Valid(); iterator.Next() {
-		namesList = append(namesList, string(iterator.Key()))
-	}
+	//	for ; iterator.Valid(); iterator.Next() {
+	//		namesList.Karma = append(namesList.Karma, string(iterator.Key()))
+	//	}
 
 	res, err := codec.MarshalJSONIndent(keeper.cdc, namesList)
 	if err != nil {

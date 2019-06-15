@@ -11,7 +11,7 @@ type KarmaRecord struct {
 }
 
 type KarmaRecordList struct {
-	Accounts []KarmaRecord
+	Karma []KarmaRecord
 }
 
 func NewKarmaRecord() KarmaRecord {
