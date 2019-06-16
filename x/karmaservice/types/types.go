@@ -1,6 +1,9 @@
 package types
 
 import (
+	"fmt"
+	"strings"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -18,4 +21,11 @@ func NewKarmaRecord() KarmaRecord {
 	return KarmaRecord{
 		Karma: 0,
 	}
+}
+
+// implement fmt.Stringer
+func (w KarmaRecord) String() string {
+	return strings.TrimSpace(fmt.Sprintf(`Address: %s
+Moniker: %s
+Karma: %s`, w.Address, w.Moniker, w.Karma))
 }

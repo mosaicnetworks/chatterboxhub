@@ -1,6 +1,10 @@
 package cli
 
 import (
+	"fmt"
+
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/utils"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/mosaicnetworks/chatterboxhub/x/karmaservice/types"
@@ -15,38 +19,38 @@ func GetQueryCmd(storeKey string, cdc *codec.Codec) *cobra.Command {
 		SuggestionsMinimumDistance: 2,
 		RunE:                       utils.ValidateCmd,
 	}
-	//	karmaserviceQueryCmd.AddCommand(client.GetCommands(
-	//		GetCmdResolveName(storeKey, cdc),
-	//		GetCmdWhois(storeKey, cdc),
-	//		GetCmdNames(storeKey, cdc),
-	//	)...)
+	karmaserviceQueryCmd.AddCommand(client.GetCommands(
+		GetCmdGetKarma(storeKey, cdc),
+		//		GetCmdWhois(storeKey, cdc),
+		//		GetCmdNames(storeKey, cdc),
+	)...)
 	return karmaserviceQueryCmd
 }
 
-/*
 // GetCmdResolveName queries information about a name
-func GetCmdResolveName(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func GetCmdGetKarma(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "resolve [name]",
-		Short: "resolve name",
+		Use:   "karma [addr]",
+		Short: "karma addr",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 			name := args[0]
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/resolve/%s", queryRoute, name), nil)
+			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/karma/%s", queryRoute, name), nil)
 			if err != nil {
-				fmt.Printf("could not resolve name - %s \n", name)
+				fmt.Printf("could not resolve address - %s \n", name)
 				return nil
 			}
 
-			var out types.QueryResResolve
+			var out types.KarmaRecord
 			cdc.MustUnmarshalJSON(res, &out)
 			return cliCtx.PrintOutput(out)
 		},
 	}
 }
 
+/*
 // GetCmdWhois queries information about a domain
 func GetCmdWhois(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
