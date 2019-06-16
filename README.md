@@ -14,3 +14,10 @@ We have a roadmap to support IBC communication between the mobile adhoc blockcha
 
 We aim to enable IBC communication between a mobile ad hoc blockchain and a central Cosmos hub using IBC. The mobile blockchain is within our Chatterbox app, which forms an adhoc blockchain using WiFi direct. We will host out central hub on AWS. 
 
+We will add a karma system to the chatterbox app. Each message will have thumbs up and thumbs down button added to it. Each button press will generate a transaction to increase / decrease the karma of the user making the comment. These transactions pass through consensus and are applied to the block chain. These transactions are summarised and communicated via IBC to the central hub where they are stored in the state of the central hub. 
+
+## How's it going
+
+We are attempting to implement a hub using the Cosmos SDK from a standing start (in terms of Cosmos knowledge at least). This is no small challenge. 
+
+Thus far we have melted 2 laptops, one with a faulty temperature sensor (unrelated to the quite mild weather) one going rogue and filling its hard disk necessitating recovery disks and a complete reinstallation of the Go development environment (exquisite timing we thought). 
