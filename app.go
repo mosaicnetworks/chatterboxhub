@@ -22,6 +22,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/params"
 	"github.com/cosmos/cosmos-sdk/x/slashing"
 	"github.com/cosmos/cosmos-sdk/x/staking"
+	"github.com/mosaicnetworks/chatterboxhub/x/ibc"
+
 	"github.com/mosaicnetworks/chatterboxhub/x/karmaservice"
 )
 
@@ -42,6 +44,7 @@ var (
 		bank.AppModuleBasic{},
 		params.AppModuleBasic{},
 		karmaservice.AppModule{},
+		ibc.AppModule{},
 		staking.AppModuleBasic{},
 		distr.AppModuleBasic{},
 		slashing.AppModuleBasic{},
@@ -70,6 +73,7 @@ type karmaServiceApp struct {
 	keyDistr         *sdk.KVStoreKey
 	tkeyDistr        *sdk.TransientStoreKey
 	keyKarma         *sdk.KVStoreKey
+	keyIBC           *sdk.KVStoreKey
 	keyParams        *sdk.KVStoreKey
 	tkeyParams       *sdk.TransientStoreKey
 	keySlashing      *sdk.KVStoreKey
@@ -83,6 +87,7 @@ type karmaServiceApp struct {
 	feeCollectionKeeper auth.FeeCollectionKeeper
 	paramsKeeper        params.Keeper
 	karmaKeeper         karmaservice.Keeper
+	ibcKeeeper          ibc.Keeper
 
 	// Module Manager
 	mm *module.Manager
@@ -110,9 +115,12 @@ func NewKarmaServiceApp(logger log.Logger, db dbm.DB) *karmaServiceApp {
 		keyDistr:         sdk.NewKVStoreKey(distr.StoreKey),
 		tkeyDistr:        sdk.NewTransientStoreKey(distr.TStoreKey),
 		keyKarma:         sdk.NewKVStoreKey(karmaservice.StoreKey),
-		keyParams:        sdk.NewKVStoreKey(params.StoreKey),
-		tkeyParams:       sdk.NewTransientStoreKey(params.TStoreKey),
-		keySlashing:      sdk.NewKVStoreKey(slashing.StoreKey),
+		//HACKATHON Should be a constant in x/ibcm bur not worth a fork
+		keyIBC: sdk.NewKVStoreKey("ibc"), // sdk.NewKVStoreKey(ibc.StoreKey),
+
+		keyParams:   sdk.NewKVStoreKey(params.StoreKey),
+		tkeyParams:  sdk.NewTransientStoreKey(params.TStoreKey),
+		keySlashing: sdk.NewKVStoreKey(slashing.StoreKey),
 	}
 
 	// The ParamsKeeper handles parameter storage for the application
@@ -186,6 +194,11 @@ func NewKarmaServiceApp(logger log.Logger, db dbm.DB) *karmaServiceApp {
 		app.cdc,
 	)
 
+	app.ibcKeeeper = ibc.NewKeeper(
+		app.cdc,
+		app.keyIBC,
+	)
+
 	app.mm = module.NewManager(
 		genaccounts.NewAppModule(app.accountKeeper),
 		genutil.NewAppModule(app.accountKeeper, app.stakingKeeper, app.BaseApp.DeliverTx),
@@ -195,6 +208,7 @@ func NewKarmaServiceApp(logger log.Logger, db dbm.DB) *karmaServiceApp {
 		distr.NewAppModule(app.distrKeeper),
 		slashing.NewAppModule(app.slashingKeeper, app.stakingKeeper),
 		staking.NewAppModule(app.stakingKeeper, app.feeCollectionKeeper, app.distrKeeper, app.accountKeeper),
+		ibc.NewAppModule(app.ibcKeeeper),
 	)
 
 	app.mm.SetOrderBeginBlockers(distr.ModuleName, slashing.ModuleName)
