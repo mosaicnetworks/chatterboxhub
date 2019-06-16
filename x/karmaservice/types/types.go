@@ -27,5 +27,5 @@ func NewKarmaRecord() KarmaRecord {
 func (w KarmaRecord) String() string {
 	return strings.TrimSpace(fmt.Sprintf(`Address: %s
 Moniker: %s
-Karma: %s`, w.Address, w.Moniker, w.Karma))
+Karma: %d`, w.Address, w.Moniker, w.Karma))
 }
